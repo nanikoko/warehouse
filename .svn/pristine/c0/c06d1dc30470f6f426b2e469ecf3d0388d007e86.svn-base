@@ -48,6 +48,7 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 
 		int totalCount = newApprovalDAO.selectRelatedDocListCount(paramMap);
 
+
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<SignDocVO> myRelateDocList = newApprovalDAO.selectRelatedDocList(paramMap, rowBounds);
 
@@ -282,6 +283,7 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 
 	}
 
+
 	// 문서결재 저장
 	@Override
 	public void reRegistSignDoc(SignDocVO signDoc, List<String> signerMemberList, List<String> reFMemberList,
@@ -347,6 +349,10 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 		}
 
 	}
+
+
+
+
 
 	// 개인결재선 그룹 저장
 	@Override
@@ -431,7 +437,6 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 		newApprovalDAO.deleteField(eno);
 	}
 
-	// 상태별 미확인 문서 체크
 	private Map<String, Integer> setNoneCheckCnt(List<AllSignVO> signDocList, int eno) throws SQLException {
 		Map<String, Integer> noneCheckMap = new HashMap<String, Integer>();
 		noneCheckMap.put("1", 0);
@@ -440,10 +445,10 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 		noneCheckMap.put("4", 0);
 		noneCheckMap.put("5", 0);
 		noneCheckMap.put("0", 0);
-
+		System.out.println("signDocList : " + signDocList);
 		for (AllSignVO signDoc : signDocList) {
-			if (signDoc.getSignerList() != null && signDoc.getSignerList().size() > 0) {
-				for (SignerVO signer : signDoc.getSignerList()) {
+			if(signDoc.getSignerList() != null && signDoc.getSignerList().size() > 0) {				
+				for(SignerVO signer : signDoc.getSignerList()) {
 					if (signer.getEno() == eno && signer.getSignState() == 1) {
 						addCnt(noneCheckMap, signDoc, eno, "1");
 					}
@@ -460,38 +465,34 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 						addCnt(noneCheckMap, signDoc, eno, "5");
 					}
 				}
-			} else {
-				if (signDoc.getState() == 1) {
+			}else {
+				if(signDoc.getState() == 1) {
 					addCnt(noneCheckMap, signDoc, eno, "1");
 				}
-				if (signDoc.getState() == 2) {
+				if(signDoc.getState() == 2) {
 					addCnt(noneCheckMap, signDoc, eno, "2");
 				}
-				if (signDoc.getState() == 3) {
+				if(signDoc.getState() == 3) {
 					addCnt(noneCheckMap, signDoc, eno, "3");
 				}
-				if (signDoc.getState() == 4) {
+				if(signDoc.getState() == 4) {
 					addCnt(noneCheckMap, signDoc, eno, "4");
 				}
-				if (signDoc.getState() == 5) {
+				if(signDoc.getState() == 5) {
 					addCnt(noneCheckMap, signDoc, eno, "5");
 				}
 			}
 		}
+		System.out.println("noneCheckMap : " + noneCheckMap);
 
 		return noneCheckMap;
 	}
 
-	// 문서 읽음 여부 체크
 	private void addCnt(Map<String, Integer> noneCheckMap, AllSignVO signDoc, int eno, String state)
 			throws SQLException {
 		int cnt = newApprovalDAO.signReadCheck(signDoc.getSignNo(), eno);
-		
-		// 안읽은 경우 
 		if (cnt == 0) {
-			// 문서의 상태별 카운트 추가
 			noneCheckMap.put(state, noneCheckMap.get(state) + 1);
-			// 전체 카운트 추가
 			noneCheckMap.put("0", noneCheckMap.get("0") + 1);
 		}
 	}
@@ -808,26 +809,23 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 		newApprovalDAO.deleteHashTag(signNo);
 	}
 
-	// 문서함별 미확인 문서 체크
 	@Override
 	public Map<String, Integer> readCheck(int eno, String referMcode) throws SQLException {
 		List<AllSignVO> allSign = null;
 
-		// 결재문서함
 		if (referMcode.equals("M122000")) {
 			allSign = newApprovalDAO.selectReadCheckApproveList(eno);
-			for (AllSignVO sign : allSign) {
+			for(AllSignVO sign : allSign) {
 				List<SignerVO> signerList = newApprovalDAO.selectSignerList(sign.getSignNo());
 				sign.setSignerList(signerList);
 			}
 		}
 
-		// 참조문서함
 		if (referMcode.equals("M123000")) {
 			allSign = newApprovalDAO.selectReadCheckViewerList(eno);
+			
 		}
 
-		// 기안문서함
 		if (referMcode.equals("M124000")) {
 			allSign = newApprovalDAO.selectReadCheckDraftList(eno);
 		}
@@ -865,6 +863,7 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 		allSign.setSignViewerList(newApprovalDAO.selectSignViewerList(signNo));
 		allSign.setAttachList(newApprovalDAO.selectSignAttachBySianNo(signNo));
 
+
 		return allSign;
 	}
 
@@ -879,7 +878,7 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 
 	}
 
-	public int selectReaderCount(AllSignVO allSign) throws SQLException {
+	public int selectReaderCount(AllSignVO allSign) throws SQLException{
 		return newApprovalDAO.selectReaderCount(allSign);
 	}
 
@@ -895,7 +894,7 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 
 	@Override
 	public Map<String, Object> getProceedingDraftDocList(Criteria cri, int eno) throws SQLException {
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String,Object> dataMap = new HashMap<String, Object>();
 
 		cri.setPerPageNum(5);
 
@@ -914,7 +913,7 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 
 	@Override
 	public Map<String, Object> getRecentTempSaveDocList(Criteria cri, int eno) throws SQLException {
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String,Object> dataMap = new HashMap<String, Object>();
 
 		cri.setPerPageNum(5);
 
@@ -933,13 +932,13 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 
 	@Override
 	public Map<String, Object> getSignMyTurnDocList(Criteria cri, int eno) throws SQLException {
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String,Object> dataMap = new HashMap<String, Object>();
 
 		cri.setPerPageNum(5);
 
 		List<AllSignVO> signList = newApprovalDAO.selectSignMyTurnDocList(cri, eno);
 
-		for (AllSignVO doc : signList) {
+		for(AllSignVO doc : signList) {
 			String lastSigner = newApprovalDAO.selectNameOfLastSigner(doc.getSignNo());
 			doc.setLastSigner(lastSigner);
 		}
@@ -955,4 +954,6 @@ public class NewApprovalServiceImpl implements NewApprovalService {
 		return dataMap;
 	}
 
-}
+
+
+ }

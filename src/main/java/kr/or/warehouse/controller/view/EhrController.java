@@ -57,31 +57,26 @@ public class EhrController {
 
 	@RequestMapping(value="/excel")
 	public void excel(HttpServletResponse response, String hrDate, int eno, HttpSession session) throws Exception {
-	// 데이터를 넣을 객체
-	System.out.println("excelCon : " + hrDate);
 
-//	EmployeeVO loginUser = (EmployeeVO) session.getAttribute("loginUser");
 	EmployeeVO emp = hrService.getEmp(eno);
-	String fileName =  emp.getName()+"_";// 파일 이름
+
+	String name = emp.getName();
+	String ppsname = emp.getPpsname();
+
+	//파일 이름 - 사원이름
+	String fileName =  emp.getName()+"_";
+	//파일 이름 - 날짜
+	String[] split = hrDate.split("-");
+	String titleDate = split[0] +"_" +split[1];
+
+	Context context = new Context();
+
 
 	HrVO hr = new HrVO();
 	hr.setEno(emp.getEno());
 	hr.setHrDate(hrDate);
 	List<Map<String, Object>> weekCalc = hrService.getWeekCalc(hr);
-	System.out.println("list : " + weekCalc);
 
-	String name = emp.getName();
-	String ppsname = emp.getPpsname();
-
-//	Date day = new Date();
-//	SimpleDateFormat format = new SimpleDateFormat("yyyy_MM");
-//	String today = format.format(day); // 오늘 날짜 생성
-
-	String[] split = hrDate.split("-");
-
-	String titleDate = split[0] +"_" +split[1];
-
-	Context context = new Context();
 	//주차 반복
 	List<HrVO> hrVoList = null;
 	List<String> weekDates = new ArrayList<String>();
@@ -90,8 +85,6 @@ public class EhrController {
 		hrVoList = hrService.getWeekTable(emp.getEno(), getDate);
 		weekDates.add(hrVoList.get(0).getWeekDate());
 		System.out.println(hrVoList);
-
-
 
 		context.putVar("week"+i, hrVoList);
 	}
@@ -112,21 +105,22 @@ public class EhrController {
 		dateList.add(time);
 	}
 
+	//엑셀 탬플릿
 	ClassPathResource classPathResource = new ClassPathResource("kr/or/warehouse/templates/excel/hrCard.xls");
 
 	try (InputStream is = new BufferedInputStream(classPathResource.getInputStream())){
 		response.setHeader("Content-Disposition","attachment; filename=" + URLEncoder.encode(fileName, "UTF-8") + titleDate +".xlsx");
 		OutputStream os = response.getOutputStream();
 
-		context.putVar("weekCalc", weekCalc);
 		context.putVar("name", name);
 		context.putVar("ppsname", ppsname);
 		context.putVar("today", titleDate);
-		context.putVar("nani", tempDate);
+		context.putVar("weekCalc", weekCalc);
 		context.putVar("dateList", dateList);
 
 		JxlsHelper.getInstance().processTemplate(is, os, context);
 		os.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -5,27 +5,25 @@
 
 <script>
 
-mentoPage = 1;
+menteePage = 1;
 workPage=1;
 docPage=1;
 
-function myMentoListGo(startPage){
-	console.log("mento");
-	mentoPage = startPage;
+function myMenteeListGo(startPage){
+	menteePage = startPage;
 	var data = {
-			'page' : mentoPage,
+			'page' : menteePage,
 			'eno' : ${loginUser.eno}
 	}
 
 	$.ajax({
-		url : '<%=request.getContextPath()%>/mentoring/main/myMentoList.do',
+		url : '<%=request.getContextPath()%>/mentoring/main/myMenteeList.do',
 		data : data,
 		type : 'post',
 		success: function(res){
 			console.log("mento",res);
-			if(res.mentoList.length > 0){
-				console.log("res.mentoList",res.mentoList);
-				printWorkData(res.mentoList, $('.myMentoList'), $('#myMentoList-template'));
+			if(res.menteeList.length > 0){
+				printWorkData(res.menteeList, $('.myMenteeList'), $('#myMenteeList-template'));
 			}else{
 				var str = `
 					<tr style="height: 45px;">
@@ -35,22 +33,22 @@ function myMentoListGo(startPage){
 					</tr>
 				`;
 
-				$('.myMentoList').html(str);
+				$('.myMenteeList').html(str);
 			}
 
-			var lPage = mentoPage - 1;
+			var lPage = menteePage - 1;
 			if(lPage < 1){lPage = 1;}
-			var rPage = mentoPage + 1;
+			var rPage = menteePage + 1;
 			if(rPage > res.pageMaker.realEndPage){rPage = res.pageMaker.realEndPage;}
 			pageMakerData = {
 					pageMaker : res.pageMaker,
-					target : 'myMentoListGo',
-					left : "javascript:myMentoListGo("+lPage+")",
-					right : "javascript:myMentoListGo("+rPage+")",
-					doubleLeft : "javascript:myMentoListGo("+1+")",
-					doubleRight :"javascript:myMentoListGo("+(res.pageMaker.realEndPage)+")"
+					target : 'myMenteeListGo',
+					left : "javascript:myMenteeListGo("+lPage+")",
+					right : "javascript:myMenteeListGo("+rPage+")",
+					doubleLeft : "javascript:myMenteeListGo("+1+")",
+					doubleRight :"javascript:myMenteeListGo("+(res.pageMaker.realEndPage)+")"
 			}
-			printPageMaker(pageMakerData ,$('.myMentoPage'), $('#pageMaker-template'));
+			printPageMaker(pageMakerData ,$('.myMenteePage'), $('#pageMaker-template'));
 		},
 		error:function(error){
 			AjaxErrorSecurityRedirectHandler(error.status);
@@ -58,7 +56,7 @@ function myMentoListGo(startPage){
 	});
 }
 
-function myMentoWorkListGo(startPage){
+function myMenteeWorkListGo(startPage){
 	workPage = startPage;
 	var data = {
 			'page' : workPage,
@@ -66,13 +64,12 @@ function myMentoWorkListGo(startPage){
 	}
 
 	$.ajax({
-		url : '<%=request.getContextPath()%>/mentoring/mento/myMentoWorkList.do',
+		url : '<%=request.getContextPath()%>/mentoring/mentee/myMenteeWorkList.do',
 		data : data,
 		type : 'post',
 		success: function(res){
-			console.log("mentowork",res);
-			if(res.myMentoWorkList.length > 0){
-				printWorkData(res.myMentoWorkList, $('.myMentoWorkList'), $('#myMentoWorkList-template'));
+			if(res.myMenteeWorkList.length > 0){
+				printWorkData(res.myMenteeWorkList, $('.myMenteeWorkList'), $('#myMenteeWorkList-template'));
 			}else{
 				var str = `
 					<tr style="height: 45px;">
@@ -82,7 +79,7 @@ function myMentoWorkListGo(startPage){
 					</tr>
 				`;
 
-				$('.myMentoWorkList').html(str);
+				$('.myMenteeWorkList').html(str);
 			}
 
 			lPage = workPage - 1;
@@ -91,13 +88,13 @@ function myMentoWorkListGo(startPage){
 			if(rPage > res.pageMaker.realEndPage){rPage = res.pageMaker.realEndPage;}
 			pageMakerData = {
 					pageMaker : res.pageMaker,
-					target : 'myMentoWorkListGo',
-					left : "javascript:myMentoWorkListGo("+lPage+")",
-					right : "javascript:myMentoWorkListGo("+rPage+")",
-					doubleLeft : "javascript:myMentoWorkListGo("+1+")",
-					doubleRight :"javascript:myMentoWorkListGo("+(res.pageMaker.realEndPage)+")"
+					target : 'myMenteeWorkListGo',
+					left : "javascript:myMenteeWorkListGo("+lPage+")",
+					right : "javascript:myMenteeWorkListGo("+rPage+")",
+					doubleLeft : "javascript:myMenteeWorkListGo("+1+")",
+					doubleRight :"javascript:myMenteeWorkListGo("+(res.pageMaker.realEndPage)+")"
 			}
-			printPageMaker(pageMakerData ,$('.myMentoWorkPage'), $('#pageMaker-template'));
+			printPageMaker(pageMakerData ,$('.myMenteeWorkPage'), $('#pageMaker-template'));
 		},
 		error:function(error){
 			AjaxErrorSecurityRedirectHandler(error.status);
@@ -105,7 +102,7 @@ function myMentoWorkListGo(startPage){
 	});
 }
 
-function myMentoDocListGo(startPage){
+function myMenteeDocListGo(startPage){
 	docPage = startPage;
 	var data = {
 			'page' : docPage,
@@ -113,13 +110,12 @@ function myMentoDocListGo(startPage){
 	}
 
 	$.ajax({
-		url : '<%=request.getContextPath()%>/mentoring/mento/myMentoDocList.do',
+		url : '<%=request.getContextPath()%>/mentoring/mentee/myMenteeDocList.do',
 		data : data,
 		type : 'post',
 		success: function(res){
-			console.log(res);
-			if(res.myMentoDocList.length > 0){
-				printWorkData(res.myMentoDocList, $('.myMentoDocList'), $('#myMentoDocList-template'));
+			if(res.myMenteeDocList.length > 0){
+				printWorkData(res.myMenteeDocList, $('.myMenteeDocList'), $('#myMenteeDocList-template'));
 			}else{
 				var str = `
 					<tr style="height: 45px;">
@@ -129,7 +125,7 @@ function myMentoDocListGo(startPage){
 					</tr>
 				`;
 
-				$('.myMentoDocList').html(str);
+				$('.myMenteeDocList').html(str);
 			}
 
 			lPage = docPage - 1;
@@ -138,13 +134,13 @@ function myMentoDocListGo(startPage){
 			if(rPage > res.pageMaker.realEndPage){rPage = res.pageMaker.realEndPage;}
 			pageMakerData = {
 					pageMaker : res.pageMaker,
-					target : 'myMentoDocListGo',
-					left : "javascript:myMentoDocListGo("+lPage+")",
-					right : "javascript:myMentoDocListGo("+rPage+")",
-					doubleLeft : "javascript:myMentoDocListGo("+1+")",
-					doubleRight :"javascript:myMentoDocListGo("+(res.pageMaker.realEndPage)+")"
+					target : 'myMenteeDocListGo',
+					left : "javascript:myMenteeDocListGo("+lPage+")",
+					right : "javascript:myMenteeDocListGo("+rPage+")",
+					doubleLeft : "javascript:myMenteeDocListGo("+1+")",
+					doubleRight :"javascript:myMenteeDocListGo("+(res.pageMaker.realEndPage)+")"
 			}
-			printPageMaker(pageMakerData ,$('.myMentoDocPage'), $('#pageMaker-template'));
+			printPageMaker(pageMakerData ,$('.myMenteeDocPage'), $('#pageMaker-template'));
 		},
 		error:function(error){
 			AjaxErrorSecurityRedirectHandler(error.status);
@@ -173,45 +169,54 @@ function detail_go(wstatus,wcode){
 }
 
 function remove_go(smno){
- 	//console.log("mtno",mtno);
-	var res = confirm("멘토링을 정말 종료하시겠습니까?");
-	window.location.reload();
-	if(!res){
-		return false;
-	}
-	$.ajax({
-		url:"<%=request.getContextPath()%>/mentoring/removeMentoring.do?smno="+smno,
-		type:"POST",
-		success:function(res){
-			console.log("res",res);
-			if(res=="OK"){
-				Swal.fire({
-				    icon: 'success',
-				    title: '멘토링이 종료되었습니다.',
-				    confirmButtonColor: '#3085d6',
-				  }).then(function(){
-					myMentoListGo(1);
-				  });
+ 	console.log("smno",smno);
 
-			}
-		},
-		error:function(error){
-			AjaxErrorSecurityRedirectHandler(error.status);
-		}
-	})
+ 	Swal.fire({
+	    title: '멘토링 종료',
+	    text: "멘토링을 정말 종료하시겠습니까?",
+	    icon: 'question',
+	    showCancelButton: true,
+	    confirmButtonColor: '#3085d6',
+	    cancelButtonColor: '#d33',
+	    confirmButtonText: '확인',
+	    cancelButtonText: '취소',
+	    reverseButtons: true, // 버튼 순서 거꾸로
+	  }).then((result) => {
+	    if (result.isConfirmed) {
+	    	$.ajax({
+	    		url:"<%=request.getContextPath()%>/mentoring/removeMentoring.do?smno="+smno,
+	    		type:"POST",
+	    		success:function(res){
+	    			console.log("smnores",res);
+	    			if(res=="OK"){
+	    				Swal.fire({
+	    				    icon: 'success',
+	    				    title: '멘토링이 종료되었습니다.',
+	    				    confirmButtonColor: '#3085d6',
+	    				  }).then(function(){
+	    					myMenteeListGo(1);
+	    					window.location.reload();
+	    				  });
+	    			}
+	    		},
+	    		error:function(error){
+	    			AjaxErrorSecurityRedirectHandler(error.status);
+	    		}
+	    	})
+	    }
+	 })
 }
+
 </script>
 
-<script type="text/x-handlebars-template"  id="myMentoList-template">
+<script type="text/x-handlebars-template"  id="myMenteeList-template">
 {{#each .}}
 	<tr>
 		<td><img class="table-avatar emp_profile" src="{{photo}}" data-name="최민규 팀장">&nbsp;&nbsp;{{name }} {{ppsName }}</td>
 		<td>{{dname}}</td>
 		<td>{{job}}</td>
 		<td>{{formatSDate startDate}} ~ {{formatEDate endDate}}</td>
-		<td>
-			<button class="btn btn-xs btn-secondary" type="button" onclick="remove_go('{{smno}}');">멘토링 종료</button>
-		</td>
+		<td><button class="btn btn-xs btn-secondary" type="button" onclick="remove_go('{{smno}}');">멘토링 종료</button></td>
 	</tr>
 {{/each}}
 </script>
@@ -242,10 +247,10 @@ function remove_go(smno){
 	</li>
 </script>
 
-<script type="text/x-handlebars-template"  id="myMentoWorkList-template">
+<script type="text/x-handlebars-template"  id="myMenteeWorkList-template">
 {{#each .}}
 	<tr onclick="detail_go('{{wstatus}}', '{{wcode }}')" style="cursor: pointer;">
-		<td style="text-align: left;  max-width: 190px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden">{{wtitle}}</td>
+		<td style="text-align: left; max-width: 190px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden">{{wtitle}}</td>
 		<td style="width: 20%;">
 		<div style="align-items: center; display: flex;">
 			<div>
@@ -267,10 +272,10 @@ function remove_go(smno){
 {{/each}}
 </script>
 
-<script type="text/x-handlebars-template"  id="myMentoDocList-template">
+<script type="text/x-handlebars-template"  id="myMenteeDocList-template">
 {{#each .}}
 	<tr style="cursor: pointer;" onclick="OpenWindow('<%=request.getContextPath()%>/approval/detail.do?signNo={{signNo}}', '결재상세', '1100', '800')">
-		<td style="text-align: left; max-width: 110px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden">{{title}}</td>
+		<td style="text-align: left;max-width: 190px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden">{{title}}</td>
 		<td style="width: 20%;">
 			<div style="align-items: center; display: flex;">
 				<div>
@@ -295,56 +300,32 @@ function remove_go(smno){
 <script>
 	Handlebars.registerHelper({
 		"formatSDate" : function(startDate){
-			var d = new Date(startDate),
-	        month = '' + (d.getMonth() + 1),
-	        day = '' + d.getDate(),
-	        year = d.getFullYear();
-
-		    if (month.length < 2)
-		        month = '0' + month;
-		    if (day.length < 2)
-		        day = '0' + day;
-
-		    return [year, month, day].join('-');
+			var dateObj = new Date(startDate);
+			var year = dateObj.getFullYear();
+			var month = dateObj.getMonth() + 1;
+			var date = dateObj.getDate();
+			return year + "-" + month + "-" + date;
 		},
 		"formatEDate" : function(endDate){
-			var d = new Date(endDate),
-	        month = '' + (d.getMonth() + 1),
-	        day = '' + d.getDate(),
-	        year = d.getFullYear();
-
-		    if (month.length < 2)
-		        month = '0' + month;
-		    if (day.length < 2)
-		        day = '0' + day;
-
-		    return [year, month, day].join('-');
+			var dateObj = new Date(endDate);
+			var year = dateObj.getFullYear();
+			var month = dateObj.getMonth() + 1;
+			var date = dateObj.getDate();
+			return year + "-" + month + "-" + date;
 		},
 		"formatDate" : function(wend){
-			var d = new Date(wend),
-	        month = '' + (d.getMonth() + 1),
-	        day = '' + d.getDate(),
-	        year = d.getFullYear();
-
-		    if (month.length < 2)
-		        month = '0' + month;
-		    if (day.length < 2)
-		        day = '0' + day;
-
-		    return [year, month, day].join('-');
+			var dateObj = new Date(wend);
+			var year = dateObj.getFullYear();
+			var month = dateObj.getMonth() + 1;
+			var date = dateObj.getDate();
+			return year + "-" + month + "-" + date;
 		},
 		"formatDDate" : function(ddate){
-			var d = new Date(ddate),
-	        month = '' + (d.getMonth() + 1),
-	        day = '' + d.getDate(),
-	        year = d.getFullYear();
-
-		    if (month.length < 2)
-		        month = '0' + month;
-		    if (day.length < 2)
-		        day = '0' + day;
-
-		    return [year, month, day].join('-');
+			var dateObj = new Date(ddate);
+			var year = dateObj.getFullYear();
+			var month = dateObj.getMonth() + 1;
+			var date = dateObj.getDate();
+			return year + "-" + month + "-" + date;
 		},
 		"statusColor":function(wstatus){
 			var str = "";
@@ -397,14 +378,14 @@ function remove_go(smno){
 			var pageMaker = pageMakerData.pageMaker;
 			var target;
 
-			if(pageMakerData.target == "myMentoListGo"){
-				target = "myMentoListGo";
+			if(pageMakerData.target == "myMenteeListGo"){
+				target = "myMenteeListGo";
 			}
-			if(pageMakerData.target == "myMentoWorkListGo"){
-				target = "myMentoWorkListGo";
+			if(pageMakerData.target == "myMenteeWorkListGo"){
+				target = "myMenteeWorkListGo";
 			}
-			if(pageMakerData.target == "myMentoDocListGo"){
-				target = "myMentoDocListGo";
+			if(pageMakerData.target == "myMenteeDocListGo"){
+				target = "myMenteeDocListGo";
 			}
 
 			var str = '';

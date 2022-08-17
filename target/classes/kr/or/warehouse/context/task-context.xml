@@ -39,14 +39,14 @@
 	<beans:bean id="loginUserLogTask"
 				class="kr.or.warehouse.scheduler.LoginUserLogTaskScheduler"
 				p:loginUserLogService-ref="loginUserLogService"
-				p:savePath-ref="loginUserLogSavePath"
-	/>
+				p:savePath-ref="loginUserLogSavePath" />
+
 	<scheduler id="LoginUserLogScheduler"/>
 	<scheduled-tasks scheduler="LoginUserLogScheduler">
 		<scheduled ref="loginUserLogTask"
 				   method="loginUserLogToDataBase"
-				   cron="0 0 12 * * *"
-		/>
+				   cron="0 0 12 * * *" />
+
 	</scheduled-tasks>
 
 	<beans:bean id="hrLogTask"

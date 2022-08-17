@@ -295,56 +295,32 @@ function remove_go(smno){
 <script>
 	Handlebars.registerHelper({
 		"formatSDate" : function(startDate){
-			var d = new Date(startDate),
-	        month = '' + (d.getMonth() + 1),
-	        day = '' + d.getDate(),
-	        year = d.getFullYear();
-
-		    if (month.length < 2)
-		        month = '0' + month;
-		    if (day.length < 2)
-		        day = '0' + day;
-
-		    return [year, month, day].join('-');
+			var dateObj = new Date(startDate);
+			var year = dateObj.getFullYear();
+			var month = dateObj.getMonth() + 1;
+			var date = dateObj.getDate();
+			return year + "-" + month + "-" + date;
 		},
 		"formatEDate" : function(endDate){
-			var d = new Date(endDate),
-	        month = '' + (d.getMonth() + 1),
-	        day = '' + d.getDate(),
-	        year = d.getFullYear();
-
-		    if (month.length < 2)
-		        month = '0' + month;
-		    if (day.length < 2)
-		        day = '0' + day;
-
-		    return [year, month, day].join('-');
+			var dateObj = new Date(endDate);
+			var year = dateObj.getFullYear();
+			var month = dateObj.getMonth() + 1;
+			var date = dateObj.getDate();
+			return year + "-" + month + "-" + date;
 		},
 		"formatDate" : function(wend){
-			var d = new Date(wend),
-	        month = '' + (d.getMonth() + 1),
-	        day = '' + d.getDate(),
-	        year = d.getFullYear();
-
-		    if (month.length < 2)
-		        month = '0' + month;
-		    if (day.length < 2)
-		        day = '0' + day;
-
-		    return [year, month, day].join('-');
+			var dateObj = new Date(wend);
+			var year = dateObj.getFullYear();
+			var month = dateObj.getMonth() + 1;
+			var date = dateObj.getDate();
+			return year + "-" + month + "-" + date;
 		},
 		"formatDDate" : function(ddate){
-			var d = new Date(ddate),
-	        month = '' + (d.getMonth() + 1),
-	        day = '' + d.getDate(),
-	        year = d.getFullYear();
-
-		    if (month.length < 2)
-		        month = '0' + month;
-		    if (day.length < 2)
-		        day = '0' + day;
-
-		    return [year, month, day].join('-');
+			var dateObj = new Date(ddate);
+			var year = dateObj.getFullYear();
+			var month = dateObj.getMonth() + 1;
+			var date = dateObj.getDate();
+			return year + "-" + month + "-" + date;
 		},
 		"statusColor":function(wstatus){
 			var str = "";
