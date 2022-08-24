@@ -116,6 +116,7 @@
 
 <script>
 
+//조직도
 $('#organization').jstree({
 	core : {
 		data :${organizationNode}
@@ -126,8 +127,9 @@ $('#organization').jstree({
 	 plugins: ['wholerow', 'types']
 });
 
+//조직도에서 사원 선택
 $('#organization').on("changed.jstree", function(e,data){
-	if(data.node.id.length > 3){
+	if(data.node.id.length > 3){ //data.node.id=선택한 사원(eno)
 		if(data.node.id == ${loginUser.eno}){
 			alert("본인은 멘토링 신청대상이 아닙니다.");
 		}else{
@@ -135,8 +137,7 @@ $('#organization').on("changed.jstree", function(e,data){
 				url : "<%=request.getContextPath()%>/mentoring/getSubMentoring.do?eno=" + data.node.id,
 				type : 'get',
 				success:function(res){
-					console.log(res);
-					if(res > 0){
+					if(res > 0){ //submentoring 테이블의 데이터 개수
 						Swal.fire({
 						      icon: 'warning',
 						      title: '이미 신청한 멘토입니다.',
